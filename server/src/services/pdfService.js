@@ -15,9 +15,19 @@ export const generatePDF = async(data)=>{
   }
  )
 
- const browser = await puppeteer.launch({
-  args: ['--no-sandbox', '--disable-setuid-sandbox']
- })
+//  const browser = await puppeteer.launch({
+//   args: ['--no-sandbox', '--disable-setuid-sandbox']
+//  })
+const browser = await puppeteer.launch({
+  executablePath: process.env.PUPPETEER_EXECUTABLE_PATH || puppeteer.executablePath(),
+  args: [
+    '--no-sandbox',
+    '--disable-setuid-sandbox',
+    '--disable-dev-shm-usage',
+    '--disable-gpu'
+  ],
+  headless: true
+})
 
  const page = await browser.newPage()
 
