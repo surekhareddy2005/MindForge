@@ -1,0 +1,440 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/base16/dracula.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Patrick+Hand&family=Kalam:wght@300;400;700&display=swap" rel="stylesheet">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/mermaid/dist/mermaid.min.js"></script>
+    <script>
+        mermaid.initialize({ startOnLoad: true, theme: 'neutral' });
+    </script>
+    <script>
+        document.addEventListener("DOMContentLoaded", () => {
+            hljs.highlightAll();
+        });
+        
+        // Script to calculate approximate page numbers for the Table of Contents
+        window.addEventListener('load', () => {
+            const A4_HEIGHT_PX = 1120; // Approximation for A4 height in pixels at standard DPI
+            const topics = document.querySelectorAll('.topic-section');
+            topics.forEach((topic, index) => {
+                const topicId = topic.id;
+                const pageNum = Math.ceil((topic.offsetTop + 1) / A4_HEIGHT_PX);
+                const tocPageCell = document.getElementById('toc-page-' + (index + 1));
+                if (tocPageCell) {
+                    tocPageCell.innerText = pageNum;
+                }
+            });
+        });
+    </script>
+    <style>
+        body {
+            font-family: 'Patrick Hand', cursive;
+            padding: 0;
+            margin: 0;
+            background-color: #ffffff;
+            color: #111;
+            line-height: 1.6;
+        }
+
+        .container {
+            max-width: 850px;
+            margin: auto;
+            padding: 40px 50px;
+        }
+
+        /* PERFECT Cover Page Centering */
+        .cover-page {
+            height: 98vh; /* Near-full viewport */
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            page-break-after: always;
+            box-sizing: border-box;
+            border: 4px double #1a1a1a;
+            margin: 0;
+            padding: 0;
+        }
+
+        .header {
+            margin-bottom: 0px;
+        }
+
+        .title {
+            font-family: 'Kalam', cursive;
+            font-size: 48px;
+            font-weight: 700;
+            margin: 10px 0;
+            text-decoration: underline;
+            color: #1a1a1a;
+        }
+
+        .subtitle {
+            font-size: 18px;
+            text-transform: uppercase;
+            letter-spacing: 3px;
+            font-weight: bold;
+            display: block;
+            margin-bottom: 25px;
+            color: #444;
+        }
+
+        /* Table of Contents */
+        .toc {
+            background: #fff;
+            border: 2px solid #000;
+            padding: 30px;
+            margin-bottom: 60px;
+            border-radius: 10px;
+            page-break-after: always;
+            page-break-inside: avoid;
+        }
+
+        .toc h2 {
+            font-family: 'Kalam', cursive;
+            text-align: center;
+            margin-top: 0;
+            border-bottom: 1px solid #000;
+            padding-bottom: 10px;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+
+        th, td {
+            border: 1px solid #000;
+            padding: 12px 15px;
+            text-align: left;
+            font-size: 18px;
+        }
+
+        th {
+            background-color: #f1f5f9;
+            font-family: 'Kalam', cursive;
+        }
+
+        .toc a {
+            color: inherit;
+            text-decoration: none;
+            display: block;
+        }
+
+        .toc a:hover {
+            text-decoration: underline;
+        }
+
+        /* PREMIUM VS Code Style Code Window (Mockup Matching) */
+        .code-window {
+            background: #282a36;
+            border-radius: 12px;
+            margin: 25px 0;
+            overflow: hidden;
+            border: 1px solid #44475a;
+            box-shadow: 0 15px 30px rgba(0,0,0,0.3);
+            page-break-inside: avoid;
+        }
+
+        .code-header {
+            background: #191a21;
+            padding: 12px 20px;
+            display: flex;
+            align-items: center;
+            position: relative;
+        }
+
+        .dots-container {
+            display: flex;
+            gap: 8px;
+            position: absolute;
+            left: 20px;
+        }
+
+        .dot { width: 12px; height: 12px; border-radius: 50%; }
+        .red { background: #ff5555; }
+        .yellow { background: #f1fa8c; }
+        .green { background: #50fa7b; }
+
+        .code-lang { 
+            color: #bd93f9; 
+            font-size: 13px; 
+            width: 100%;
+            text-align: center;
+            font-family: 'Segoe UI', sans-serif;
+            font-weight: 500;
+            opacity: 0.8;
+        }
+
+        .hljs {
+            background: #282a36 !important;
+            padding: 22px !important;
+            font-size: 14px !important;
+            font-family: 'Consolas', 'Monaco', 'Courier New', monospace !important;
+            line-height: 1.5 !important;
+            border: none !important;
+            margin: 0 !important;
+            white-space: pre-wrap !important; 
+            word-wrap: break-word !important;
+            overflow-wrap: break-word !important;
+            tab-size: 4;
+            font-weight: 400;
+        }
+
+        /* Ensure code is never squashed and always crisp */
+        pre {
+            margin: 0;
+            padding: 0;
+            overflow: visible;
+        }
+
+        code {
+            font-family: inherit;
+        }
+        .topic-section {
+            margin-bottom: 60px;
+        }
+
+        /* Topic Styles */
+        .topic-header {
+            margin-top: 30px;
+            margin-bottom: 20px;
+            padding-bottom: 5px;
+            border-bottom: 3px solid #000;
+        }
+
+        .topic-header h2 {
+            font-family: 'Kalam', cursive;
+            font-size: 32px;
+            margin: 0;
+        }
+
+        /* Info Blocks */
+        .info-block {
+            margin: 15px 0;
+            padding: 20px;
+            border-radius: 12px;
+            border: 2px solid #000;
+            position: relative;
+        }
+
+        .block-label {
+            position: absolute;
+            top: -14px;
+            left: 20px;
+            background: #fff;
+            padding: 0 10px;
+            font-weight: 900;
+            font-size: 14px;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+        }
+
+        .code-snippet {
+            font-family: 'Consolas', 'Monaco', 'Courier New', monospace;
+            background: #1e293b;
+            padding: 15px;
+            border-radius: 8px;
+            font-size: 14px;
+            white-space: pre-wrap;
+            word-break: break-all;
+            margin: 10px 0;
+            border: 1px solid #000;
+            color: #f8fafc;
+            line-height: 1.4;
+        }
+
+        .why-matters { background: #f0fdf4; border-color: #166534; color: #166534; }
+        .definition { background: #eff6ff; border-color: #1e40af; color: #1e40af; }
+        .example { background: #fffbeb; border-color: #92400e; color: #92400e; }
+        .keypoints { background: #fafafa; border-color: #111; }
+        .summary { background: #fdf2f8; border-color: #9d174d; font-style: italic; }
+
+        .section-title {
+            font-family: 'Kalam', cursive;
+            font-size: 24px;
+            margin: 15px 0 5px 0;
+            text-decoration: underline;
+        }
+
+        .content-text {
+            font-size: 19px;
+            margin-bottom: 10px;
+            color: #111;
+            white-space: normal;
+        }    ul { padding-left: 25px; }
+        li { margin-bottom: 8px; font-size: 18px; }
+
+        .page-break { page-break-after: always; }
+        .no-break { page-break-inside: avoid; }
+
+    </style>
+</head>
+<body>
+    <!-- Full-Width Cover Page -->
+    <div class="cover-page">
+        <div class="header">
+            <span class="subtitle">Lecture Notes | <%= date %></span>
+            <h1 class="title"><%= lecture_title %></h1>
+        </div>
+    </div>
+
+    <div class="container">
+        <!-- Table of Contents in a Table -->
+        <div class="toc">
+            <h2>Table of Contents</h2>
+            <table>
+                <thead>
+                    <tr>
+                        <th style="width: 10%; text-align: center;">No.</th>
+                        <th>Topic Description</th>
+                        <th style="width: 15%; text-align: center;">Page</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <% topics.forEach((topic, index) => { %>
+                        <tr>
+                            <td style="text-align: center;"><%= index + 1 %></td>
+                            <td>
+                                <a href="#topic-<%= index + 1 %>">
+                                    <%= topic.title %>
+                                </a>
+                            </td>
+                            <td style="text-align: center;" id="toc-page-<%= index + 1 %>">..</td>
+                        </tr>
+                    <% }) %>
+                </tbody>
+            </table>
+        </div>
+
+        <!-- Concept Map Section -->
+        <% if (locals.conceptMap) { %>
+            <div class="topic-section no-break">
+                <div class="topic-header">
+                    <h2>Lecture Concept Map</h2>
+                </div>
+                <div class="info-block keypoints">
+                    <div class="mermaid" style="display: flex; justify-content: center;">
+                        <%= conceptMap %>
+                    </div>
+                </div>
+            </div>
+        <% } %>
+
+        <!-- Topics -->
+        <% topics.forEach((topic, index) => { %>
+            <div class="topic-section" id="topic-<%= index + 1 %>">
+                <div class="topic-header">
+                    <h2><%= index + 1 %>. <%= topic.title %></h2>
+                </div>
+
+                <% if (topic.why_matters) { %>
+                    <div class="info-block why-matters no-break">
+                        <span class="block-label">Why This Matters</span>
+                        <div class="content-text"><%= topic.why_matters %></div>
+                    </div>
+                <% } %>
+
+                <div class="info-block definition">
+                    <span class="block-label">Concept Introduction</span>
+                    <div class="content-text"><%= topic.introduction %></div>
+                </div>
+
+                <% if (topic.sections) { %>
+                    <% topic.sections.forEach(section => { %>
+                        <div class="no-break" style="margin-bottom: 25px;">
+                            <div class="section-title">~ <%= section.title %></div>
+                            
+                            <% if (section.description) { %>
+                                <div class="content-text"><%= section.description %></div>
+                            <% } %>
+
+                            <% if (section.code) { %>
+                                <div class="code-window">
+                                    <div class="code-header">
+                                        <div class="dots-container">
+                                            <div class="dot red"></div>
+                                            <div class="dot yellow"></div>
+                                            <div class="dot green"></div>
+                                        </div>
+                                        <span class="code-lang">lecture_snippet.js</span>
+                                    </div>
+                                    <pre><code class="language-javascript"><%= section.code %></code></pre>
+                                </div>
+                            <% } %>
+                        </div>
+                    <% }) %>
+                <% } %>
+
+                <% if (topic.key_points && topic.key_points.length > 0) { %>
+                    <div class="info-block keypoints no-break">
+                        <span class="block-label">Key Takeaways</span>
+                        <ul>
+                            <% topic.key_points.forEach(point => { %>
+                                <li> <%= point %></li>
+                            <% }) %>
+                        </ul>
+                    </div>
+                <% } %>
+
+                <% if (topic.examples && topic.examples.length > 0) { %>
+                    <% topic.examples.forEach(ex => { %>
+                        <div class="info-block example no-break">
+                            <span class="block-label">Example: <%= ex.title %></span>
+                            
+                            <% if (ex.description) { %>
+                                <div class="content-text"><%= ex.description %></div>
+                            <% } %>
+
+                            <% if (ex.code) { %>
+                                <div class="code-window">
+                                    <div class="code-header">
+                                        <div class="dots-container">
+                                            <div class="dot red"></div>
+                                            <div class="dot yellow"></div>
+                                            <div class="dot green"></div>
+                                        </div>
+                                        <span class="code-lang">example.js</span>
+                                    </div>
+                                    <pre><code class="language-javascript"><%= ex.code %></code></pre>
+                                </div>
+                            <% } %>
+                        </div>
+                    <% }) %>
+                <% } %>
+
+                <% if (topic.summary) { %>
+                    <div class="info-block summary no-break">
+                        <span class="block-label">Quick Summary</span>
+                        <%= topic.summary %>
+                    </div>
+                <% } %>
+            </div>
+        <% }) %>
+
+        <!-- Reference Files Section -->
+        <% if (locals.fileUrls && fileUrls.length > 0) { %>
+            <div class="topic-section no-break">
+                <div class="topic-header">
+                    <h2>Reference Materials</h2>
+                </div>
+                <div class="info-block definition">
+                    <ul style="list-style: none; padding: 0;">
+                        <% fileUrls.forEach((url, i) => { %>
+                            <li style="margin-bottom: 15px;">
+                                <a href="<%= url %>" style="color: #1e40af; text-decoration: underline; font-weight: bold;">
+                                    📎 <%= url.split('/').pop().split('-').slice(1).join('-') || 'Reference File ' + (i+1) %>
+                                </a>
+                            </li>
+                        <% }) %>
+                    </ul>
+                </div>
+            </div>
+        <% } %>
+    </div>
+</body>
+</html>

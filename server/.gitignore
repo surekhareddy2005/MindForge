@@ -1,0 +1,7 @@
+node_modules
+.env
+scratch/
+run-seed.js
+src/utils/seed.js
+uploads/
+output/
