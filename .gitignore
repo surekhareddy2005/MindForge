@@ -43,7 +43,3 @@ server/build/
 
 # Local scratch folder
 server/scratch/
-
-# Database seeding utilities
-server/src/utils/seed.js
-server/run-seed.js
