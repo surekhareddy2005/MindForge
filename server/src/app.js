@@ -18,6 +18,8 @@ const allowedOrigins = [
   "https://mindforge-seven.vercel.app",
   "https://mindforge.live",
   "https://www.mindforge.live",
+  "https://project-8714f.vercel.app",
+  "https://project-mindforge.vercel.app", 
   "http://localhost:5173",
   "http://localhost:8081",
   "http://localhost:19006",
