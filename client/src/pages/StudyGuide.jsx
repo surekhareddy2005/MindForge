@@ -233,13 +233,16 @@ const StudyGuide = () => {
           
           if (qQuestions.length > 0) {
             const mappedQuiz = qQuestions.map(q => {
+              // DEBUG - remove after fix
+              console.log("RAW Q:", JSON.stringify(q));
+              
               let correctIndex = -1;
               if (q.options && q.correctAnswer) {
                 // Try exact match first
                 correctIndex = q.options.findIndex(opt => 
                   opt.trim().toLowerCase() === q.correctAnswer.trim().toLowerCase()
                 );
-                // Try partial match (correctAnswer might be contained in option)
+                // Try partial match
                 if (correctIndex === -1) {
                   correctIndex = q.options.findIndex(opt =>
                     opt.trim().toLowerCase().includes(q.correctAnswer.trim().toLowerCase()) ||
@@ -249,6 +252,9 @@ const StudyGuide = () => {
               }
               // Fallback to numeric correct field
               if (correctIndex === -1 && q.correct !== undefined) correctIndex = q.correct;
+              
+              console.log("correctAnswer:", q.correctAnswer, "→ index:", correctIndex, "options:", q.options);
+              
               return {
                 ...q,
                 correct: correctIndex
