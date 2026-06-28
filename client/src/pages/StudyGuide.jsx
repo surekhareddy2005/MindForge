@@ -818,17 +818,24 @@ const StudyGuide = () => {
 
                                   if (showResults) {
                                     if (isCorrect) {
+                                      // Always highlight correct answer green
                                       border = '2px solid #22c55e';
-                                      bg = 'rgba(34, 197, 94, 0.1)';
-                                      color = '#ffffff';
-                                    } else if (isSelected) {
+                                      bg = 'rgba(34, 197, 94, 0.15)';
+                                      color = '#22c55e';
+                                    } else if (isSelected && !isCorrect) {
+                                      // Wrong selected answer red
                                       border = '2px solid #ef4444';
-                                      bg = 'rgba(239, 68, 68, 0.1)';
-                                      color = '#ffffff';
+                                      bg = 'rgba(239, 68, 68, 0.15)';
+                                      color = '#ef4444';
+                                    } else {
+                                      // Other options dim
+                                      border = '1px solid rgba(255,255,255,0.03)';
+                                      bg = 'rgba(255,255,255,0.01)';
+                                      color = 'var(--text-muted)';
                                     }
                                   } else if (isSelected) {
                                     border = '2px solid var(--primary)';
-                                    bg = 'rgba(212, 175, 55, 0.1)';
+                                    bg = 'rgba(79, 70, 229, 0.1)';
                                     color = 'var(--primary)';
                                   }
 
@@ -850,15 +857,15 @@ const StudyGuide = () => {
                                         justifyContent: 'space-between',
                                         alignItems: 'center',
                                         transition: 'all 0.2s ease',
-                                        opacity: showResults && !isCorrect && !isSelected ? 0.4 : 1
+                                        opacity: showResults && !isCorrect && !isSelected ? 0.5 : 1
                                       }}
                                     >
                                       <div style={{ display: 'flex', gap: '1rem', alignItems: 'center' }}>
                                         <div style={{ 
                                           width: '32px', height: '32px', borderRadius: '8px', 
-                                          background: isSelected ? (showResults ? (isCorrect ? '#22c55e' : '#ef4444') : 'var(--primary)') : (showResults && isCorrect ? '#22c55e' : 'rgba(255,255,255,0.05)'),
+                                          background: showResults ? (isCorrect ? '#22c55e' : (isSelected ? '#ef4444' : 'rgba(255,255,255,0.05)')) : (isSelected ? 'var(--primary)' : 'rgba(255,255,255,0.05)'),
                                           display: 'flex', alignItems: 'center', justifyContent: 'center',
-                                          fontSize: '0.8rem', fontWeight: 900, color: isSelected ? (showResults && !isCorrect ? 'white' : 'var(--bg-main)') : 'var(--text-muted)'
+                                          fontSize: '0.8rem', fontWeight: 900, color: showResults ? (isCorrect ? 'white' : (isSelected ? 'white' : 'var(--text-muted)')) : (isSelected ? 'white' : 'var(--text-muted)')
                                         }}>
                                           {String.fromCharCode(65 + oIdx)}
                                         </div>
@@ -935,17 +942,17 @@ const StudyGuide = () => {
                           <p style={{ fontSize: '1.3rem', color: 'var(--text-secondary)', marginBottom: '1rem' }}>
                             You scored <strong style={{ color: 'var(--primary)', fontSize: '1.8rem', margin: '0 8px' }}>{calculateScore()}</strong> out of <strong>{quiz.length}</strong>
                           </p>
-                          <div style={{ display: 'flex', gap: '1rem', justifyContent: 'center', marginTop: '0.5rem' }}>
-                            <span style={{ background: 'rgba(34,197,94,0.15)', color: '#22c55e', padding: '4px 16px', borderRadius: '20px', fontWeight: 700 }}>
+                          <div style={{ display: 'flex', gap: '1rem', justifyContent: 'center', marginTop: '0.5rem', flexWrap: 'wrap' }}>
+                            <span style={{ background: 'rgba(34,197,94,0.15)', color: '#22c55e', padding: '6px 18px', borderRadius: '20px', fontWeight: 700, fontSize: '0.95rem' }}>
                               ✓ {calculateScore()} Correct
                             </span>
-                            <span style={{ background: 'rgba(239,68,68,0.15)', color: '#ef4444', padding: '4px 16px', borderRadius: '20px', fontWeight: 700 }}>
-                              ✗ {quiz.length - calculateScore()} Wrong
+                            <span style={{ background: 'rgba(239,68,68,0.15)', color: '#ef4444', padding: '6px 18px', borderRadius: '20px', fontWeight: 700, fontSize: '0.95rem' }}>
+                              ✗ {Object.keys(quizAnswers).filter(i => quizAnswers[i] !== quiz[i]?.correct).length} Wrong
+                            </span>
+                            <span style={{ background: 'rgba(148,163,184,0.15)', color: '#94A3B8', padding: '6px 18px', borderRadius: '20px', fontWeight: 700, fontSize: '0.95rem' }}>
+                              ○ {quiz.length - Object.keys(quizAnswers).length} Unattempted
                             </span>
                           </div>
-                          <p style={{ fontSize: '0.9rem', color: 'var(--text-muted)', marginTop: '1rem' }}>
-                            ⬇ Scroll through questions to see correct answers highlighted in green
-                          </p>
                         </motion.div>
                       )}
 
