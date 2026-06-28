@@ -233,9 +233,22 @@ const StudyGuide = () => {
           
           if (qQuestions.length > 0) {
             const mappedQuiz = qQuestions.map(q => {
-              // Find the index of the correct answer string in the options array
-              let correctIndex = q.options?.indexOf(q.correctAnswer) ?? -1;
-              if (correctIndex === -1 && q.correct !== undefined) correctIndex = q.correct; // Fallback
+              let correctIndex = -1;
+              if (q.options && q.correctAnswer) {
+                // Try exact match first
+                correctIndex = q.options.findIndex(opt => 
+                  opt.trim().toLowerCase() === q.correctAnswer.trim().toLowerCase()
+                );
+                // Try partial match (correctAnswer might be contained in option)
+                if (correctIndex === -1) {
+                  correctIndex = q.options.findIndex(opt =>
+                    opt.trim().toLowerCase().includes(q.correctAnswer.trim().toLowerCase()) ||
+                    q.correctAnswer.trim().toLowerCase().includes(opt.trim().toLowerCase())
+                  );
+                }
+              }
+              // Fallback to numeric correct field
+              if (correctIndex === -1 && q.correct !== undefined) correctIndex = q.correct;
               return {
                 ...q,
                 correct: correctIndex
