@@ -344,15 +344,21 @@ export const generateQuizForUpload = async (req, res) => {
         const combinedTranscript = await getCombinedTranscript(uploadDoc.sessionId);
         const rawQuiz = await generateQuiz(combinedTranscript || uploadDoc.transcript);
         
+        console.log("Raw quiz type:", typeof rawQuiz, Array.isArray(rawQuiz), "length:", rawQuiz?.length);
+        console.log("Sample raw question:", JSON.stringify(rawQuiz?.[0]));
+
+        // Handle both array and object with questions property
+        const quizArray = Array.isArray(rawQuiz) ? rawQuiz : (rawQuiz?.questions || []);
+        
         // Explicitly map to ensure correctAnswer is saved
-        const quiz = rawQuiz.map(q => ({
+        const quiz = quizArray.map(q => ({
           question: q.question,
           options: q.options,
           correctAnswer: q.correctAnswer || "",
           explanation: q.explanation || ""
         }));
 
-        console.log("Saving quiz, sample correctAnswer:", quiz[0]?.correctAnswer);
+        console.log("Final quiz length:", quiz.length, "sample correctAnswer:", quiz[0]?.correctAnswer);
         
         await Quiz.findOneAndUpdate(
           { uploadId },
