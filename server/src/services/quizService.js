@@ -11,39 +11,6 @@ export const generateQuiz = async (combinedContent) => {
     processedContent = await summarizeLargeText(combinedContent);
   }
 
-  const prompt = `
-    You are an expert educator. Your task is to generate 10-15 high-quality Multiple Choice Questions (MCQs) based on the provided material.
-    
-    The material contains MULTIPLE SOURCES (e.g., transcripts and supplementary files). 
-    CRITICAL: You MUST ensure that questions cover topics from BOTH the transcripts and the supplementary files.
-    
-    Requirements for each question:
-    1. A clear, challenging question.
-    2. Exactly 4 options.
-    3. Identify the correct answer.
-    4. Provide a brief explanation for why it is correct.
-    
-    Material:
-    ${processedContent}
-    
-    Return the response as a STRICT JSON object with the following structure:
-    {
-      "questions": [
-        {
-          "question": "The question text?",
-          "options": ["Option A", "Option B", "Option C", "Option D"],
-          "correctAnswer": "Option B",
-          "explanation": "Brief explanation..."
-        }
-      ]
-    }
-    
-    Rules:
-    - **STRICT GROUNDING**: Derive content EXCLUSIVELY from the provided materials.
-    - **BALANCED SOURCE USAGE**: Ensure a fair distribution of questions across all provided source files.
-    - **NO EXTERNAL KNOWLEDGE**: Do NOT include information or options not present in the materials.
-  `;
-
   try {
     const response = await ai.chat.completions.create({
       messages: [
@@ -51,14 +18,28 @@ export const generateQuiz = async (combinedContent) => {
           role: "system",
           content: `You are an expert educator. Generate 10-15 high-quality MCQs based on the provided materials.
           
-          STRICT GROUNDING & SOURCE RULES:
-          - The input contains multiple sources. You MUST include questions from the supplementary files, not just the transcript.
+          STRICT RULES:
           - Derive content EXCLUSIVELY from the provided text.
-          - Return ONLY a valid JSON object.`
+          - Return ONLY a valid JSON object with NO extra text.
+          - Every question MUST have correctAnswer field with the EXACT text of the correct option.
+          
+          Return ONLY this JSON structure:
+          {
+            "questions": [
+              {
+                "question": "The question text?",
+                "options": ["Option A text", "Option B text", "Option C text", "Option D text"],
+                "correctAnswer": "Option B text",
+                "explanation": "Brief explanation why this is correct."
+              }
+            ]
+          }
+          
+          CRITICAL: correctAnswer MUST be the EXACT same text as one of the options.`
         },
         {
           role: "user",
-          content: `Materials:\n${processedContent}`
+          content: `Generate 10-15 MCQs from this material:\n\n${processedContent}`
         }
       ],
       temperature: 0.1,
@@ -78,7 +59,6 @@ export const generateQuiz = async (combinedContent) => {
         for (let i = start; i < content.length; i++) {
           if (content[i] === '{') brackets++;
           else if (content[i] === '}') brackets--;
-          
           if (brackets === 0) {
             cleanContent = content.substring(start, i + 1);
             break;
@@ -87,7 +67,19 @@ export const generateQuiz = async (combinedContent) => {
       }
     }
     
-    return JSON.parse(cleanContent).questions;
+    const parsed = JSON.parse(cleanContent);
+    const questions = parsed.questions || parsed;
+    
+    // Validate each question has correctAnswer
+    questions.forEach((q, i) => {
+      if (!q.correctAnswer) {
+        console.warn(`Question ${i} missing correctAnswer:`, q.question);
+      }
+    });
+
+    console.log("Quiz generated:", questions.length, "questions, sample correctAnswer:", questions[0]?.correctAnswer);
+    
+    return questions;
   } catch (error) {
     console.error("Quiz generation error:", error);
     throw error;
