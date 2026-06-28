@@ -856,7 +856,7 @@ const StudyGuide = () => {
                                       <div style={{ display: 'flex', gap: '1rem', alignItems: 'center' }}>
                                         <div style={{ 
                                           width: '32px', height: '32px', borderRadius: '8px', 
-                                          background: isSelected ? (showResults ? (isCorrect ? '#22c55e' : '#ef4444') : 'var(--primary)') : 'rgba(255,255,255,0.05)',
+                                          background: isSelected ? (showResults ? (isCorrect ? '#22c55e' : '#ef4444') : 'var(--primary)') : (showResults && isCorrect ? '#22c55e' : 'rgba(255,255,255,0.05)'),
                                           display: 'flex', alignItems: 'center', justifyContent: 'center',
                                           fontSize: '0.8rem', fontWeight: 900, color: isSelected ? (showResults && !isCorrect ? 'white' : 'var(--bg-main)') : 'var(--text-muted)'
                                         }}>
@@ -929,10 +929,23 @@ const StudyGuide = () => {
                         <motion.div 
                           initial={{ opacity: 0, scale: 0.95 }}
                           animate={{ opacity: 1, scale: 1 }}
-                          style={{ background: 'rgba(212, 175, 55, 0.05)', border: '1px solid var(--primary)', padding: '2rem 3rem', borderRadius: '24px', width: '100%', maxWidth: '600px' }}
+                          style={{ background: 'rgba(79, 70, 229, 0.05)', border: '1px solid var(--primary)', padding: '2rem 3rem', borderRadius: '24px', width: '100%', maxWidth: '600px' }}
                         >
                           <h3 style={{ fontSize: '1.8rem', color: 'var(--text-primary)', marginBottom: '1rem', fontFamily: 'Playfair Display, serif' }}>Quiz Results</h3>
-                          <p style={{ fontSize: '1.3rem', color: 'var(--text-secondary)' }}>You scored <strong style={{ color: 'var(--primary)', fontSize: '1.8rem', margin: '0 8px' }}>{calculateScore()}</strong> out of <strong>{quiz.length}</strong></p>
+                          <p style={{ fontSize: '1.3rem', color: 'var(--text-secondary)', marginBottom: '1rem' }}>
+                            You scored <strong style={{ color: 'var(--primary)', fontSize: '1.8rem', margin: '0 8px' }}>{calculateScore()}</strong> out of <strong>{quiz.length}</strong>
+                          </p>
+                          <div style={{ display: 'flex', gap: '1rem', justifyContent: 'center', marginTop: '0.5rem' }}>
+                            <span style={{ background: 'rgba(34,197,94,0.15)', color: '#22c55e', padding: '4px 16px', borderRadius: '20px', fontWeight: 700 }}>
+                              ✓ {calculateScore()} Correct
+                            </span>
+                            <span style={{ background: 'rgba(239,68,68,0.15)', color: '#ef4444', padding: '4px 16px', borderRadius: '20px', fontWeight: 700 }}>
+                              ✗ {quiz.length - calculateScore()} Wrong
+                            </span>
+                          </div>
+                          <p style={{ fontSize: '0.9rem', color: 'var(--text-muted)', marginTop: '1rem' }}>
+                            ⬇ Scroll through questions to see correct answers highlighted in green
+                          </p>
                         </motion.div>
                       )}
 
@@ -940,7 +953,7 @@ const StudyGuide = () => {
                         {!showResults && (
                           <button 
                             className="glow-btn" 
-                            onClick={() => setShowResults(true)}
+                            onClick={() => { setShowResults(true); setCurrentQuizPage(0); }}
                             style={{ padding: '14px 32px', fontSize: '1rem', fontWeight: 700 }}
                           >
                             Submit Quiz
