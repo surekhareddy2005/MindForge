@@ -234,12 +234,16 @@ const StudyGuide = () => {
           if (qQuestions.length > 0) {
             const mappedQuiz = qQuestions.map(q => {
               let correctIndex = -1;
-              if (q.options && q.correctAnswer) {
-                // Exact match (case-insensitive)
+
+              // Priority 1: use correctIndex directly (most reliable)
+              if (typeof q.correctIndex === 'number' && q.correctIndex >= 0) {
+                correctIndex = q.correctIndex;
+              }
+              // Priority 2: match correctAnswer text against options
+              else if (q.options && q.correctAnswer) {
                 correctIndex = q.options.findIndex(opt => 
                   opt.trim().toLowerCase() === q.correctAnswer.trim().toLowerCase()
                 );
-                // Partial match
                 if (correctIndex === -1) {
                   correctIndex = q.options.findIndex(opt =>
                     opt.trim().toLowerCase().includes(q.correctAnswer.trim().toLowerCase()) ||
@@ -247,13 +251,14 @@ const StudyGuide = () => {
                   );
                 }
               }
-              // Fallback to numeric correct field
+              // Priority 3: fallback to numeric correct field
               if (correctIndex === -1 && typeof q.correct === 'number') correctIndex = q.correct;
-              // If still -1 (old data without correctAnswer), mark as -1 so no answer is highlighted
+              
               return {
                 ...q,
                 correct: correctIndex,
-                hasCorrectAnswer: correctIndex !== -1
+                hasCorrectAnswer: correctIndex !== -1,
+                correctAnswerText: q.correctAnswer || (q.options && correctIndex >= 0 ? q.options[correctIndex] : null)
               };
             });
             setQuiz(mappedQuiz);
@@ -825,7 +830,11 @@ const StudyGuide = () => {
                               <div style={{ display: 'flex', flexDirection: 'column', gap: '1.2rem' }}>
                                 {q.options.map((option, oIdx) => {
                                   const isSelected = selectedOption === oIdx;
-                                  const isCorrect = q.correct === oIdx;
+                                  // Check by index OR by direct text match with correctAnswer
+                                  const isCorrect = q.correct === oIdx || 
+                                    (q.correctAnswerText && opt.trim().toLowerCase() === q.correctAnswerText.trim().toLowerCase()) ||
+                                    (q.correctAnswerText && opt.trim().toLowerCase().includes(q.correctAnswerText.trim().toLowerCase())) ||
+                                    (q.correctAnswerText && q.correctAnswerText.trim().toLowerCase().includes(opt.trim().toLowerCase()));
                                   
                                   let border = '1px solid rgba(255,255,255,0.05)';
                                   let bg = 'rgba(255,255,255,0.02)';
