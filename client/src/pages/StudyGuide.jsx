@@ -832,9 +832,9 @@ const StudyGuide = () => {
                                   const isSelected = selectedOption === oIdx;
                                   // Check by index OR by direct text match with correctAnswer
                                   const isCorrect = q.correct === oIdx || 
-                                    (q.correctAnswerText && opt.trim().toLowerCase() === q.correctAnswerText.trim().toLowerCase()) ||
-                                    (q.correctAnswerText && opt.trim().toLowerCase().includes(q.correctAnswerText.trim().toLowerCase())) ||
-                                    (q.correctAnswerText && q.correctAnswerText.trim().toLowerCase().includes(opt.trim().toLowerCase()));
+                                    (q.correctAnswerText && option.trim().toLowerCase() === q.correctAnswerText.trim().toLowerCase()) ||
+                                    (q.correctAnswerText && option.trim().toLowerCase().includes(q.correctAnswerText.trim().toLowerCase())) ||
+                                    (q.correctAnswerText && q.correctAnswerText.trim().toLowerCase().includes(option.trim().toLowerCase()));
                                   
                                   let border = '1px solid rgba(255,255,255,0.05)';
                                   let bg = 'rgba(255,255,255,0.02)';
