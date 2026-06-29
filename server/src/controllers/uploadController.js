@@ -298,11 +298,20 @@ export const generateInterviewForUpload = async (req, res) => {
     setImmediate(async () => {
       try {
         const combinedTranscript = await getCombinedTranscript(uploadDoc.sessionId);
-        const interviewQuestions = await generateInterviewQuestions(combinedTranscript || uploadDoc.transcript);
-        
+        const rawInterview = await generateInterviewQuestions(combinedTranscript || uploadDoc.transcript);
+
+        // Explicitly map to ensure fields are saved correctly
+        const interviewArray = Array.isArray(rawInterview) ? rawInterview : (rawInterview?.questions || []);
+        const interviewQuestions = interviewArray.map(q => ({
+          question: q.question,
+          answer: q.answer || q.idealAnswer || q.ideal_answer || ""
+        }));
+
+        console.log(`Saving ${interviewQuestions.length} interview questions, sample: "${interviewQuestions[0]?.question?.substring(0,50)}"`);
+
         await Interview.findOneAndUpdate(
           { uploadId },
-          { sessionId: uploadDoc.sessionId, uploadId, questions: interviewQuestions },
+          { $set: { sessionId: uploadDoc.sessionId, uploadId, questions: interviewQuestions } },
           { upsert: true, new: true }
         );
 
