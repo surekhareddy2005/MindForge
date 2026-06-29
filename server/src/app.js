@@ -11,7 +11,7 @@ import feedbackRoutes from "./routes/feedbackRoutes.js";
 import chatRoutes from "./routes/chatRoutes.js";
 import userRoutes from "./routes/userRoutes.js";
 import notificationRoutes from "./routes/notificationRoutes.js";
-
+import interviewEvalRoutes from "./routes/interviewEvalRoutes.js";
 const app = express();
 
 const allowedOrigins = [
