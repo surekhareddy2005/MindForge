@@ -188,6 +188,7 @@ const StudyGuide = () => {
   const [showResults, setShowResults] = useState(false);
   const [currentInterviewPage, setCurrentInterviewPage] = useState(0);
   const [voiceInterviewOpen, setVoiceInterviewOpen] = useState(false);
+  const [showInterviewBank, setShowInterviewBank] = useState(false);
   const [currentQuizPage, setCurrentQuizPage] = useState(0);
   const [isFullScreen, setIsFullScreen] = useState(false);
   const itemsPerPage = 6;
@@ -711,22 +712,42 @@ const StudyGuide = () => {
                       <h2 style={{ fontFamily: 'Playfair Display, serif', fontSize: '2.5rem', color: 'var(--text-primary)', fontWeight: 800 }}>
                         Interview <span style={{ color: 'var(--primary)' }}>Mastery</span>
                       </h2>
-                      <button
-                        onClick={() => setVoiceInterviewOpen(true)}
-                        style={{
-                          marginTop: '1rem',
-                          display: 'inline-flex', alignItems: 'center', gap: 10,
-                          padding: '14px 28px',
-                          background: 'linear-gradient(135deg, #4F46E5, #7C3AED)',
-                          color: '#fff', border: 'none', borderRadius: 12,
-                          fontWeight: 700, fontSize: '1rem', cursor: 'pointer',
-                          boxShadow: '0 4px 20px rgba(79,70,229,0.4)'
-                        }}
-                      >
-                        🎤 Start Voice Mock Interview
-                      </button>
+                      <p style={{ color: 'var(--text-secondary)', maxWidth: 480, margin: '0.75rem auto 0', fontSize: '0.95rem' }}>
+                        Practice out loud with an AI interviewer, or reveal the question bank to study at your own pace.
+                      </p>
+                      <div style={{ display: 'flex', gap: '1rem', justifyContent: 'center', flexWrap: 'wrap', marginTop: '1.5rem' }}>
+                        <button
+                          onClick={() => setVoiceInterviewOpen(true)}
+                          style={{
+                            display: 'inline-flex', alignItems: 'center', gap: 10,
+                            padding: '14px 28px',
+                            background: 'linear-gradient(135deg, #4F46E5, #7C3AED)',
+                            color: '#fff', border: 'none', borderRadius: 12,
+                            fontWeight: 700, fontSize: '1rem', cursor: 'pointer',
+                            boxShadow: '0 4px 20px rgba(79,70,229,0.4)'
+                          }}
+                        >
+                          🎤 Start Voice Mock Interview
+                        </button>
+                        <button
+                          onClick={() => setShowInterviewBank(prev => !prev)}
+                          style={{
+                            display: 'inline-flex', alignItems: 'center', gap: 8,
+                            padding: '14px 24px',
+                            background: 'transparent',
+                            color: 'var(--text-secondary)',
+                            border: '1px solid rgba(255,255,255,0.1)',
+                            borderRadius: 12,
+                            fontWeight: 600, fontSize: '0.95rem', cursor: 'pointer'
+                          }}
+                        >
+                          {showInterviewBank ? 'Hide Question Bank' : '📖 View Question Bank'}
+                        </button>
+                      </div>
                     </div>
 
+                    {showInterviewBank && (
+                    <>
                     <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
                       {interviewQuestions
                         .slice(currentInterviewPage * itemsPerPage, (currentInterviewPage + 1) * itemsPerPage)
@@ -787,6 +808,8 @@ const StudyGuide = () => {
                           <ChevronRight size={24} />
                         </button>
                       </div>
+                    )}
+                    </>
                     )}
                   </>
                 ) : (
