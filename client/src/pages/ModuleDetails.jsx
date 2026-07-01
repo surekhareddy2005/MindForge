@@ -24,7 +24,7 @@ const DeleteModal = ({ isOpen, onClose, onConfirm, title, message }) => {
     <AnimatePresence>
       {isOpen && (
         <div style={{
-          position: 'fixed', top: 0, left: '280px', right: 0, bottom: 0,
+          position: 'fixed', top: 0, left: 0, right: 0, bottom: 0,
           background: 'rgba(0,0,0,0.85)', backdropFilter: 'blur(8px)',
           display: 'flex', alignItems: 'center', justifyContent: 'center',
           zIndex: 1100, padding: '20px'
@@ -289,10 +289,10 @@ const ModuleDetails = () => {
 
                 {showCreateModal && (
                     <div style={{ 
-                        position: 'fixed', top: 0, left: '280px', right: 0, bottom: 0, 
+                        position: 'fixed', top: 0, left: 0, right: 0, bottom: 0, 
                         background: 'rgba(0,0,0,0.85)', 
                         backdropFilter: 'blur(6px)',
-                        display: 'flex', justifyContent: 'center', alignItems: 'center', zIndex: 9999 
+                        display: 'flex', justifyContent: 'center', alignItems: 'center', zIndex: 9999, paddingLeft: '280px' 
                     }}>
                         <motion.div 
                             initial={{ opacity: 0, scale: 0.9 }}
