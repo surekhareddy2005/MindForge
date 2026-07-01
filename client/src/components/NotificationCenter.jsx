@@ -172,7 +172,7 @@ const PipelineItem = ({ pipeline, pipelineStatus = {}, onGenerate, onView, index
                                             {stage.id === 'transcription' ? 'READY' : <><Eye size={12} strokeWidth={3} /> View</>}
                                         </button>
                                     ) : (
-                                        {stage.id !== 'transcription' && (
+                                        stage.id !== 'transcription' && (
                                         <button
                                             disabled={!dependencyMet || isMainProcessing || isGenerating}
                                             onClick={() => onGenerate(pipeline.id || pipeline._id, stage.id)}
@@ -191,7 +191,7 @@ const PipelineItem = ({ pipeline, pipelineStatus = {}, onGenerate, onView, index
                                         >
                                             {isGenerating ? 'Generating...' : 'Generate'}
                                         </button>
-                                        )}
+                                        )
                                     )
                                     }
                                 </div>
