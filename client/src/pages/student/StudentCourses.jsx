@@ -39,14 +39,14 @@ const StudentCourses = () => {
   };
 
   const courseVisuals = [
-    { gradient: 'linear-gradient(135deg, #4F46E5 0%, #1E1B4B 100%)', Icon: Code2 },
-    { gradient: 'linear-gradient(135deg, #7C3AED 0%, #2E1065 100%)', Icon: Layers },
-    { gradient: 'linear-gradient(135deg, #06B6D4 0%, #0E2A3A 100%)', Icon: Terminal },
-    { gradient: 'linear-gradient(135deg, #4F46E5 0%, #06B6D4 100%)', Icon: Brain },
-    { gradient: 'linear-gradient(135deg, #7C3AED 0%, #4F46E5 100%)', Icon: Database },
-    { gradient: 'linear-gradient(135deg, #1E293B 0%, #4F46E5 100%)', Icon: Globe },
-    { gradient: 'linear-gradient(135deg, #0F172A 0%, #7C3AED 100%)', Icon: Cpu },
-    { gradient: 'linear-gradient(135deg, #1E1B4B 0%, #06B6D4 100%)', Icon: BookOpen },
+    { gradient: 'linear-gradient(135deg, #4F46E5 0%, #0F172A 100%)', Icon: Code2 },
+    { gradient: 'linear-gradient(135deg, #7C3AED 0%, #0F172A 100%)', Icon: Layers },
+    { gradient: 'linear-gradient(135deg, #4F46E5 0%, #7C3AED 100%)', Icon: Terminal },
+    { gradient: 'linear-gradient(135deg, #1E1B4B 0%, #4F46E5 100%)', Icon: Brain },
+    { gradient: 'linear-gradient(135deg, #2E1065 0%, #7C3AED 100%)', Icon: Database },
+    { gradient: 'linear-gradient(135deg, #0F172A 0%, #4F46E5 100%)', Icon: Globe },
+    { gradient: 'linear-gradient(135deg, #1E293B 0%, #7C3AED 100%)', Icon: Cpu },
+    { gradient: 'linear-gradient(135deg, #312E81 0%, #4F46E5 100%)', Icon: BookOpen },
   ];
 
   const getVisualForCourse = (courseName) => {
@@ -178,7 +178,7 @@ const StudentCourses = () => {
                     })()
                   )}
                   <div style={{ position: 'absolute', bottom: '12px', left: '12px' }}>
-                    <span style={{ padding: '4px 10px', borderRadius: '6px', background: 'var(--primary-surface)', color: 'var(--primary)', fontSize: '0.75rem', fontWeight: 600 }}>ACTIVE</span>
+                    <span style={{ padding: '4px 10px', borderRadius: '6px', background: 'rgba(255,255,255,0.15)', backdropFilter: 'blur(8px)', color: '#ffffff', fontSize: '0.75rem', fontWeight: 700, border: '1px solid rgba(255,255,255,0.3)' }}>ACTIVE</span>
                   </div>
                 </div>
                 <div style={{ padding: '2rem' }}>
