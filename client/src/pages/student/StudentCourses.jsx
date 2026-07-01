@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { getMyCourses } from '../../services/api';
 import { motion } from 'framer-motion';
-import { Search } from 'lucide-react';
+import { Search, Code2, Database, Cpu, Globe, BookOpen, Layers, Terminal, Brain } from 'lucide-react';
 import DotsLoader from '../../components/DotsLoader';
 import StudentSidebar from '../../components/student/StudentSidebar';
 import Header from '../../components/Header';
@@ -36,6 +36,25 @@ const StudentCourses = () => {
     if (name.includes('owl')) return '/owlcoder.png';
     if (name.includes('dsa')) return '/dsa.png';
     return null;
+  };
+
+  const courseVisuals = [
+    { gradient: 'linear-gradient(135deg, #4F46E5 0%, #1E1B4B 100%)', Icon: Code2 },
+    { gradient: 'linear-gradient(135deg, #7C3AED 0%, #2E1065 100%)', Icon: Layers },
+    { gradient: 'linear-gradient(135deg, #06B6D4 0%, #0E2A3A 100%)', Icon: Terminal },
+    { gradient: 'linear-gradient(135deg, #4F46E5 0%, #06B6D4 100%)', Icon: Brain },
+    { gradient: 'linear-gradient(135deg, #7C3AED 0%, #4F46E5 100%)', Icon: Database },
+    { gradient: 'linear-gradient(135deg, #1E293B 0%, #4F46E5 100%)', Icon: Globe },
+    { gradient: 'linear-gradient(135deg, #0F172A 0%, #7C3AED 100%)', Icon: Cpu },
+    { gradient: 'linear-gradient(135deg, #1E1B4B 0%, #06B6D4 100%)', Icon: BookOpen },
+  ];
+
+  const getVisualForCourse = (courseName) => {
+    let hash = 0;
+    for (let i = 0; i < courseName.length; i++) {
+      hash = courseName.charCodeAt(i) + ((hash << 5) - hash);
+    }
+    return courseVisuals[Math.abs(hash) % courseVisuals.length];
   };
 
   if (loading) return (
@@ -144,11 +163,20 @@ const StudentCourses = () => {
                   height: '200px', 
                   background: getImageForCourse(course.title) 
                     ? `url(${getImageForCourse(course.title)})` 
-                    : 'linear-gradient(45deg, #1e1e1e, #2a2a2a)',
+                    : getVisualForCourse(course.title).gradient,
                   backgroundSize: 'cover',
                   backgroundPosition: 'center',
-                  position: 'relative' 
+                  position: 'relative',
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center'
                 }}>
+                  {!getImageForCourse(course.title) && (
+                    (() => {
+                      const { Icon } = getVisualForCourse(course.title);
+                      return <Icon size={56} color="rgba(248,250,252,0.25)" strokeWidth={1.5} />;
+                    })()
+                  )}
                   <div style={{ position: 'absolute', bottom: '12px', left: '12px' }}>
                     <span style={{ padding: '4px 10px', borderRadius: '6px', background: 'var(--primary-surface)', color: 'var(--primary)', fontSize: '0.75rem', fontWeight: 600 }}>ACTIVE</span>
                   </div>
