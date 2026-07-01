@@ -290,13 +290,14 @@ const ModuleDetails = () => {
                 {showCreateModal && (
                     <div style={{ 
                         position: 'fixed', top: 0, left: 0, right: 0, bottom: 0, 
-                        background: 'rgba(0,0,0,0.8)', display: 'flex', justifyContent: 'center', alignItems: 'center', zIndex: 1000 
+                        background: 'rgba(0,0,0,0.85)', 
+                        backdropFilter: 'blur(6px)',
+                        display: 'flex', justifyContent: 'center', alignItems: 'center', zIndex: 1000 
                     }}>
                         <motion.div 
                             initial={{ opacity: 0, scale: 0.9 }}
                             animate={{ opacity: 1, scale: 1 }}
-                            className="glass" 
-                            style={{ padding: '2rem', borderRadius: '24px', width: '450px', background: 'var(--bg-secondary)', border: '1px solid var(--border)' }}
+                            style={{ padding: '2rem', borderRadius: '24px', width: '450px', background: '#1E293B', border: '1px solid rgba(79,70,229,0.3)', boxShadow: '0 25px 60px rgba(0,0,0,0.6)' }}
                         >
                             <h2 style={{ marginBottom: '1.5rem', textAlign: 'center' }}>Create New Session</h2>
                             <form onSubmit={handleCreateSession}>
